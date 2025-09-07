@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Birthday Gift Box 🎁</title>
+  <title>Exploding Birthday Gift 🎁</title>
   <style>
     body {
       margin: 0;
@@ -15,7 +15,7 @@
       overflow: hidden;
     }
 
-    /* Gift Box */
+    /* Gift Box Container */
     .gift {
       position: relative;
       width: 150px;
@@ -24,28 +24,15 @@
       border-radius: 15px;
       cursor: pointer;
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-      transition: transform 0.6s ease;
-    }
-    .gift:hover {
-      transform: scale(1.05);
-    }
-
-    .lid {
-      position: absolute;
-      top: -40px;
-      width: 150px;
-      height: 40px;
-      background: #e73370;
-      border-radius: 10px 10px 0 0;
-      transition: transform 0.6s ease;
-      transform-origin: bottom center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s;
+      z-index: 10;
     }
 
     .ribbon {
       position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
       width: 20px;
       height: 150px;
       background: gold;
@@ -54,7 +41,7 @@
     .ribbon::after {
       content: "";
       position: absolute;
-      top: -40px;
+      top: 65px;
       left: -65px;
       width: 150px;
       height: 20px;
@@ -62,7 +49,7 @@
       border-radius: 10px;
     }
 
-    /* Surprise Content */
+    /* Surprise Section */
     .surprise {
       position: absolute;
       top: 50%;
@@ -70,7 +57,7 @@
       transform: translate(-50%, -50%);
       text-align: center;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 1.5s ease;
       max-width: 90%;
     }
 
@@ -115,12 +102,22 @@
       from { text-shadow: 0 0 10px #ff80ab, 0 0 20px #ff4081; }
       to   { text-shadow: 0 0 20px #ff80ab, 0 0 40px #ff4081; }
     }
+
+    /* Explosion pieces */
+    .piece {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: #ff4081;
+      border-radius: 8px;
+      opacity: 1;
+      transition: transform 1s ease, opacity 1s ease;
+    }
   </style>
 </head>
 <body>
   <!-- Gift Box -->
   <div class="gift" id="giftBox">
-    <div class="lid" id="lid"></div>
     <div class="ribbon"></div>
   </div>
 
@@ -139,31 +136,49 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     const gift = document.getElementById("giftBox");
-    const lid = document.getElementById("lid");
     const surprise = document.getElementById("surprise");
-
     let opened = false;
+
     gift.addEventListener("click", () => {
       if (opened) return;
       opened = true;
 
-      // Animate lid
-      lid.style.transform = "rotateX(120deg) translateY(-20px)";
-      gift.style.transform = "translateY(50px) scale(0.8)";
+      // Create explosion pieces
+      for (let i = 0; i < 9; i++) {
+        const piece = document.createElement("div");
+        piece.classList.add("piece");
+        piece.style.background = i % 2 === 0 ? "#ff4081" : "#e73370";
+        gift.appendChild(piece);
 
-      // Confetti burst
-      for (let i = 0; i < 5; i++) {
-        confetti({
-          particleCount: 50,
-          spread: 100,
-          origin: { x: 0.5, y: 0.5 }
-        });
+        let x = (Math.random() - 0.5) * 400;
+        let y = (Math.random() - 0.5) * 400;
+
+        setTimeout(() => {
+          piece.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random()*720}deg)`;
+          piece.style.opacity = 0;
+        }, 50);
       }
+
+      // Hide gift after explosion
+      setTimeout(() => {
+        gift.style.display = "none";
+      }, 1000);
+
+      // Confetti blast
+      setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+          confetti({
+            particleCount: 80,
+            spread: 120,
+            origin: { x: 0.5, y: 0.5 }
+          });
+        }
+      }, 800);
 
       // Show surprise
       setTimeout(() => {
         surprise.style.opacity = 1;
-      }, 800);
+      }, 1500);
     });
   </script>
 </body>
