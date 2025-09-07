@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Birthday Gift Box 🎁</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: "Poppins", sans-serif;
+      overflow: hidden;
+    }
+
+    /* Gift Box */
+    .gift {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      background: #ff4081;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      transition: transform 0.6s ease;
+    }
+    .gift:hover {
+      transform: scale(1.05);
+    }
+
+    .lid {
+      position: absolute;
+      top: -40px;
+      width: 150px;
+      height: 40px;
+      background: #e73370;
+      border-radius: 10px 10px 0 0;
+      transition: transform 0.6s ease;
+      transform-origin: bottom center;
+    }
+
+    .ribbon {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 150px;
+      background: gold;
+      border-radius: 10px;
+    }
+    .ribbon::after {
+      content: "";
+      position: absolute;
+      top: -40px;
+      left: -65px;
+      width: 150px;
+      height: 20px;
+      background: gold;
+      border-radius: 10px;
+    }
+
+    /* Surprise Content */
+    .surprise {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+      max-width: 90%;
+    }
+
+    .surprise h2 {
+      font-size: 2rem;
+      color: #ff4081;
+      margin-bottom: 20px;
+      text-shadow: 0 0 15px white;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .links a {
+      text-decoration: none;
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      background: white;
+      color: #ff4081;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s, background 0.3s;
+    }
+    .links a:hover {
+      transform: scale(1.08);
+      background: #ffe4ec;
+    }
+
+    .wish {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      color: #fff;
+      font-weight: bold;
+      text-shadow: 0 0 10px #ff4081, 0 0 20px #ff80ab;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff80ab, 0 0 20px #ff4081; }
+      to   { text-shadow: 0 0 20px #ff80ab, 0 0 40px #ff4081; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Gift Box -->
+  <div class="gift" id="giftBox">
+    <div class="lid" id="lid"></div>
+    <div class="ribbon"></div>
+  </div>
+
+  <!-- Surprise Section -->
+  <div class="surprise" id="surprise">
+    <h2>🎁 Your Birthday Gifts 🎁</h2>
+    <div class="links">
+      <a href="https://tanmaygarg2009.github.io/shurti/" target="_blank">1) Special Surprise Website</a>
+      <a href="https://tanmaygarg2009.github.io/main/" target="_blank">2) Main Celebration Page</a>
+      <a href="https://tanmaygarg2009.github.io/poem/" target="_blank">3) A Poem for You</a>
+    </div>
+    <div class="wish">💖 Wishing you the Happiest Birthday, Shruti! 💖</div>
+  </div>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const gift = document.getElementById("giftBox");
+    const lid = document.getElementById("lid");
+    const surprise = document.getElementById("surprise");
+
+    let opened = false;
+    gift.addEventListener("click", () => {
+      if (opened) return;
+      opened = true;
+
+      // Animate lid
+      lid.style.transform = "rotateX(120deg) translateY(-20px)";
+      gift.style.transform = "translateY(50px) scale(0.8)";
+
+      // Confetti burst
+      for (let i = 0; i < 5; i++) {
+        confetti({
+          particleCount: 50,
+          spread: 100,
+          origin: { x: 0.5, y: 0.5 }
+        });
+      }
+
+      // Show surprise
+      setTimeout(() => {
+        surprise.style.opacity = 1;
+      }, 800);
+    });
+  </script>
+</body>
+</html>
